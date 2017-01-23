@@ -3,7 +3,7 @@ int X, Y;
 int nX, nY;
 int delay = 16;
 
-ImageGrid image;
+ImageGrid grid;
 SceneManager sceneManager;
 
 // Setup buttons
@@ -29,7 +29,8 @@ void setup(){
   sceneManager.init();
 
   // create image grid
-  image = new ImageGrid(200, 150, 0, 0);
+  grid = new ImageGrid(0, 0, w, h-50, 10, 10);
+  grid.setForegroundColor(color(255, 0, 255));
 
   // create control button panel
   controls = new ButtonPanel(0, h-50, w, 50);
@@ -43,6 +44,7 @@ void draw(){
   fill( 255, 121, 184 );
   ellipse( 40, 50, 50, 50);
 
+  grid.draw();
   controls.draw();
 }
 
