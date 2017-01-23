@@ -48,6 +48,10 @@ class Drawable {
 		this.cstroke = c;
 	}
 
+	public void setNoStroke() {
+		this.cstroke = null;
+	}
+
 	public void setHighlightColor(color c) {
 		this.chighlight = c;
 	}
@@ -100,10 +104,13 @@ class SquareDrawable extends Drawable {
 	public void draw() {
 		if (isSelected()) {
 			fill(highlightColor());
-			stroke(strokeColor());
 		} else {
 			fill(backgroundColor());
+		}
+		if (strokeColor() != null) {
 			stroke(strokeColor());
+		} else {
+			noStroke();
 		}
 		rect(this.x, this.y, width, height);
 	}
