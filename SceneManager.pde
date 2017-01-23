@@ -5,17 +5,38 @@ public class SceneManager {
 	int SCENE_FINISHED = 2;
 
 	int scene;
+	int sceneTimer;
+	int STEP_SIZE = 1;
+	int SCENE_DURATION = 1;
 
-	public SceneManager() {}
+	public SceneManager() {
+		init();
+	}
 
 	public void init() {
 		scene = 0;
+		sceneTimer = 0;
+	}
+
+	public boolean update() {
+		if (sceneTimer < SCENE_DURATION) {
+			sceneTimer += STEP_SIZE;
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public boolean nextScene() {
-		if (scene < 3) {
-			scene += 1;
+		switch(scene) {
+			case SCENE_CREATE_IMAGE:
+				scene = SCENE_SEARCH;
+				break;
+			case SCENE_SEARCH:
+				scene = SCENE_FINISHED;
+				break;
 		}
+		sceneTimer = 0;
 	}
 
 }
