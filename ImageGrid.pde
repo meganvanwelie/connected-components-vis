@@ -1,7 +1,4 @@
-class ImageGrid extends Drawable {
-
-	int width;
-	int height;
+class ImageGrid extends SquareDrawable {
 
 	float xdiv;
 	float ydiv;
@@ -9,10 +6,8 @@ class ImageGrid extends Drawable {
 	ArrayList<GridLine> gridLines;
 	Pixel[][] image;
 
-	public ImageGrid(int x, int y, int w, int h, int hsteps, int vsteps) {
-		super(x, y);
-		this.width = w;
-		this.height = h;
+	public ImageGrid(float x, float y, float w, float h, int hsteps, int vsteps) {
+		super(x, y, w, h);
 
 		this.xdiv = w / hsteps;
 		this.ydiv = h / vsteps;
@@ -35,8 +30,9 @@ class ImageGrid extends Drawable {
 	}
 
 	public void draw() {
-		fill(backgroundColor());
-		rect(this.x, this.y, width, height);
+		super.draw();
+
+		//update();
 
 		fill(foregroundColor());
 		for (GridLine gl : gridLines) {
@@ -51,6 +47,7 @@ class Pixel {
 	public Pixel() {
 
 	}
+
 
 }
 

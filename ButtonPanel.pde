@@ -2,18 +2,12 @@ class ButtonPanel extends SquareDrawable {
 
 	HashMap<String, Button> buttons;
 
-	int width;
-	int height;
-
-	public ButtonPanel(int x, int y, int w, int h) {
+	public ButtonPanel(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		this.width = w;
-		this.height = h;
-
 		this.buttons = new HashMap<String, Button>();
 	}
 
-	public void addButton(int w, int h, int x, int y,
+	public void addButton(float w, float h, float x, float y,
 							String label, var functionality) {
 		Button button = new Button(w, h, x, y);
 		button.setLabel(label);
@@ -28,35 +22,35 @@ class ButtonPanel extends SquareDrawable {
 		}
 	}
 
-	public void onMouseClick() {
+	public void onMousePressed() {
 		for (Button button : buttons.values()) {
 			if (button.contains(mouseX, mouseY)) {
-				button.click();
+				activeButton = button;
+				activeButton.click();
 				break;
 			}
 		}
 	}
+
+	public void onMouseReleased() {
+		if (activeButton != null) {
+			activeButton.release();
+			activeButton = null;
+		}
+	}
 }
 
-class Button extends Drawable {
+class Button extends SquareDrawable {
 
-	var functionality;
 	String label;
+	var functionality;
 
-	int width;
-	int height;
+	public Button(float x, float y, float w, float h) {
+		super(x, y, w, h);
+		this.label = "";
+		this.functionality = null;
 
-	public Button(int x, int y, int w, int h) {
-		super(x, y);
-		this.width = w;
-		this.height = h;
-
-		functionality = null;
-		label = "Click Me";
-
-		chighlight = color(255, 0, 0);
-
-		selected = false;
+		setHighlightColor(color(255, 0, 0));
 	}
 
 	public void setLabel(String label) {
@@ -68,10 +62,7 @@ class Button extends Drawable {
 	}
 
 	public void draw() {
-		// draw button
-		fill(backgroundColor());
-		stroke(strokeColor());
-		rect(this.x, this.y, width, height);
+		super.draw();
 		// draw button text
 		fill(textColor());
 		textAlign(CENTER);

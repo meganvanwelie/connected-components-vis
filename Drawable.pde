@@ -1,7 +1,7 @@
 class Drawable {
 
-	int x;
-	int y;
+	float x;
+	float y;
 
 	private color cbackgounrd;
 	private color cforeground;
@@ -11,7 +11,7 @@ class Drawable {
 
 	private boolean selected;
 
-	public Drawable(int x, int y) {
+	public Drawable(float x, float y) {
 		this.x = x;
 		this.y = y;
 
@@ -80,14 +80,18 @@ class Drawable {
 		console.log("ERROR: Not implemented, subclass responsibility!");
 	}
 
+	public void onMousePressed() {
+		console.log("ERROR: Not implemented, subclass responsibility!");
+	}
+
 }
 
 class SquareDrawable extends Drawable {
 
-	int width;
-	int height;
+	float width;
+	float height;
 
-	public SquareDrawable(int x, int y, int w, int h) {
+	public SquareDrawable(float x, float y, float w, float h) {
 		super(x, y);
 		this.width = w;
 		this.height = h;
