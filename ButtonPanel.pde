@@ -1,10 +1,12 @@
 class ButtonPanel extends SquareDrawable {
 
 	HashMap<String, Button> buttons;
+	Button activeButton;
 
 	public ButtonPanel(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		this.buttons = new HashMap<String, Button>();
+		this.activeButton = null;
 	}
 
 	public void addButton(float w, float h, float x, float y,
@@ -73,7 +75,12 @@ class Button extends SquareDrawable {
 		if (functionality != null) {
 			functionality();
 		}
+		select(true);
 		console.log(this.label + ": button clicked");
+	}
+
+	public void release() {
+		select(false);
 	}
 
 	public boolean contains(int x, int y) {
