@@ -77,6 +77,9 @@ void mousePressed() {
 }
 
 void mouseReleased() {
+	if (sceneManager.scene == sceneManager.SCENE_CREATE_IMAGE) {
+		grid.onMouseReleased();
+	}
 	controls.onMouseReleased();
 }
 

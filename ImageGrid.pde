@@ -51,36 +51,28 @@ class ImageGrid extends SquareDrawable {
 
 	public void draw() {
 		super.draw();
-
-		//update();
-
-		stroke(strokeColor());
-		for (GridLine gl : gridLines) {
-			line(gl.start.x, gl.start.y, gl.end.x, gl.end.y);
-		}
-
-		/*
-		if (this.activePixel != null) {
-			console.log("Active pixel not null");
-			activePixel.draw();
-		}
-		*/
+		// draw pixels
 		int row, col;
 		for (row = 0; row < vsteps; ++row) {
 			for (col = 0; col < hsteps; ++col) {
 				this.image[row][col].draw();
 			}
 		}
+		// draw grid lines
+		stroke(strokeColor());
+		for (GridLine gl : gridLines) {
+			line(gl.start.x, gl.start.y, gl.end.x, gl.end.y);
+		}
 	}
 
 	public void onMousePressed() {
-		if (mouseButton == LEFT) {
-			setActivePixel();
-		} else if (mouseButton == RIGHT) {
+		locateActivePixel();
+		setActivePixelState();
+	}
 
-		} else {
-
-		}
+	public void onMouseReleased() {
+		clearActivePixel();
+		//activePixelect(false);
 	}
 
 	public void onMouseDragged() {
@@ -99,8 +91,9 @@ class ImageGrid extends SquareDrawable {
 				}
 			}
 		} else {
-			setActivePixel();
+			locateActivePixel();
 		}
+		setActivePixelState();
 	}
 
 	public boolean contains(int x, int y) {
@@ -108,7 +101,8 @@ class ImageGrid extends SquareDrawable {
 			   (y >= this.y && y <= this.y + height);
 	}
 
-	private void setActivePixel() {
+	/* Locates and sets the currently selected pixel. */
+	private void locateActivePixel() {
 		clearActivePixel();
 		if (contains(mouseX, mouseY)) {
 			int col, row;
@@ -124,16 +118,22 @@ class ImageGrid extends SquareDrawable {
 
 	private void setActivePixel(Pixel p) {
 		this.activePixel = p;
-		activePixel.select(true);
 	}
 
 	private void clearActivePixel() {
-		if (this.activePixel != null) {
-			activePixel.select(false);
-			this.activePixel = null;
-		}
+		this.activePixel = null;
 	}
 
+	private void setActivePixelState() {
+		// set pixel to selected
+		if (activePixel != null) {
+			if (mouseButton == LEFT) {
+				activePixel.select(true);
+			} else {
+				activePixel.select(false);
+			}
+		}
+	}
 
 }
 
