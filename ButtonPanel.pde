@@ -22,7 +22,7 @@ class ButtonPanel extends Drawable {
 	}
 
 	public void draw() {
-		fill(this.cfill);
+		fill(backgroundColor());
 		rect(this.x, this.y, width, height);
 		for (Button button : buttons.values()) {
 			button.draw();
@@ -71,11 +71,11 @@ class Button extends Drawable {
 
 	public void draw() {
 		// draw button
-		fill(this.cfill);
-		stroke(this.cstroke);
+		fill(backgroundColor());
+		stroke(strokeColor());
 		rect(this.x, this.y, width, height);
 		// draw button text
-		fill(0);
+		fill(textColor());
 		textAlign(CENTER);
 		text(this.label, this.x + width/2, this.y + height/2);
 	}

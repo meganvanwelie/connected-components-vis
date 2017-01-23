@@ -3,7 +3,9 @@ class Drawable {
 	int x;
 	int y;
 
-	color cfill;
+	color cbackgounrd;
+	color cforeground;
+	color ctext;
 	color cstroke;
 	color chighlight;
 
@@ -13,11 +15,53 @@ class Drawable {
 		this.x = x;
 		this.y = y;
 
-		cfill = color(255, 255, 255);
-		cstroke = color(0, 0, 0);
-		chighlight = color(255);
+		setBackgroundColor(color(255));
+		setForegroundColor(color(255));
+		setTextColor(color(0));
+		setStrokeColor(color(0));
+		setHighlightColor(color(255));
 
 		selected = false;
+	}
+
+	public void setBackgroundColor(color c) {
+		this.cbackground = c;
+	}
+
+	public void setForegroundColor(color c) {
+		this.cforeground = c;
+	}
+
+	public void setTextColor(color c) {
+		this.ctext = c;
+	}
+
+	public void setStrokeColor(color c) {
+		this.cstroke = c;
+	}
+
+	public void setHighlightColor(color c) {
+		this.chighlight = c;
+	}
+
+	public color backgroundColor() {
+		return this.cbackground;
+	}
+
+	public color foregroundColor() {
+		return this.cforeground;
+	}
+
+	public color textColor() {
+		return this.ctext;
+	}
+
+	public color strokeColor() {
+		return this.cstroke;
+	}
+
+	public color highlightColor() {
+		return this.chighlight;
 	}
 
 }
