@@ -1,4 +1,4 @@
-class ButtonPanel extends Drawable {
+class ButtonPanel extends SquareDrawable {
 
 	HashMap<String, Button> buttons;
 
@@ -6,7 +6,7 @@ class ButtonPanel extends Drawable {
 	int height;
 
 	public ButtonPanel(int x, int y, int w, int h) {
-		super(x, y);
+		super(x, y, w, h);
 		this.width = w;
 		this.height = h;
 
@@ -22,8 +22,7 @@ class ButtonPanel extends Drawable {
 	}
 
 	public void draw() {
-		fill(backgroundColor());
-		rect(this.x, this.y, width, height);
+		super.draw();
 		for (Button button : buttons.values()) {
 			button.draw();
 		}
@@ -37,7 +36,6 @@ class ButtonPanel extends Drawable {
 			}
 		}
 	}
-
 }
 
 class Button extends Drawable {

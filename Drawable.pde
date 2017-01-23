@@ -3,13 +3,13 @@ class Drawable {
 	int x;
 	int y;
 
-	color cbackgounrd;
-	color cforeground;
-	color ctext;
-	color cstroke;
-	color chighlight;
+	private color cbackgounrd;
+	private color cforeground;
+	private color ctext;
+	private color cstroke;
+	private color chighlight;
 
-	boolean selected;
+	private boolean selected;
 
 	public Drawable(int x, int y) {
 		this.x = x;
@@ -19,9 +19,17 @@ class Drawable {
 		setForegroundColor(color(255));
 		setTextColor(color(0));
 		setStrokeColor(color(0));
-		setHighlightColor(color(255));
+		setHighlightColor(color(255, 0, 0));
 
-		selected = false;
+		select(false);
+	}
+
+	public void select() {
+		this.selected = !this.selected;
+	}
+
+	public void select(boolean s) {
+		this.selected = s;
 	}
 
 	public void setBackgroundColor(color c) {
@@ -44,6 +52,10 @@ class Drawable {
 		this.chighlight = c;
 	}
 
+	public boolean isSelected() {
+		return this.selected;
+	}
+
 	public color backgroundColor() {
 		return this.cbackground;
 	}
@@ -62,6 +74,34 @@ class Drawable {
 
 	public color highlightColor() {
 		return this.chighlight;
+	}
+
+	public void onMouseClick() {
+		console.log("ERROR: Not implemented, subclass responsibility!");
+	}
+
+}
+
+class SquareDrawable extends Drawable {
+
+	int width;
+	int height;
+
+	public SquareDrawable(int x, int y, int w, int h) {
+		super(x, y);
+		this.width = w;
+		this.height = h;
+	}
+
+	public void draw() {
+		if (isSelected()) {
+			fill(highlightColor());
+			stroke(strokeColor());
+		} else {
+			fill(backgroundColor());
+			stroke(strokeColor());
+		}
+		rect(this.x, this.y, width, height);
 	}
 
 }
