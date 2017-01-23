@@ -22,18 +22,19 @@ String buttonStart = "Start";
 void setup(){
   int w = 600;
   int h = 600;
-  size( w, h );
+  int border = 5;
+  size( w+2*border, h+2*border );
 
   // setup and initialize scene manager
   sceneManager = new SceneManager();
   sceneManager.init();
 
   // create image grid
-  grid = new ImageGrid(0, 0, w, h-50, 10, 10);
-  grid.setForegroundColor(color(255, 0, 255));
+  grid = new ImageGrid(border, border, w, h-50, 10, 10);
+  grid.setStrokeColor(color(255, 0, 255));
 
   // create control button panel
-  controls = new ButtonPanel(0, h-50, w, 50);
+  controls = new ButtonPanel(border, h-50, w, 50);
   controls.addButton(10, h-50+5, 40, 25, buttonDemo, demo);
   controls.addButton(w-10-40, h-50+5, 40, 25, buttonStart, startAlgorithm);
 }
@@ -41,24 +42,41 @@ void setup(){
 void draw(){
   background(0, 0, 0);
 
-  fill( 255, 121, 184 );
-  ellipse( 40, 50, 50, 50);
+  if (sceneManager.update()) {
+	  /*
+	  if (queue.length > 0) {
+		currentPixel = queue.shift();
+		addToQueue(currentPixel.neighbors());
+	  } else {
+		sweepPixel = sweepPixel.nextPixel(grid);
+		if (!sweepPixel.isAssigned()) {
+			updateConnectedComponentId(); // get next ID
+			queue.push(sweepPixel);		  // add to queue
+		}
+	  }
+	  */
+  }
 
   grid.draw();
   controls.draw();
 }
 
-void mouseClicked() {
-	if (sceneManager.scene == sceneManager.SCENE_INIT) {
-		imageGrid.onMouseClick();
-	}
-	controls.onMouseClick();
-}
-
-void mouseMoved(){
-	if (sceneManager.scene == sceneManager.SCENE_INIT) {
-		imageGrid.onMouseMoved();
+void mouseDragged() {
+	console.log("Main mouse dragged");
+	if (sceneManager.scene == sceneManager.SCENE_CREATE_IMAGE) {
+		grid.onMouseDragged();
 	}
 }
 
+void mousePressed() {
+	console.log("Main mouse click");
+	if (sceneManager.scene == sceneManager.SCENE_CREATE_IMAGE) {
+		grid.onMousePressed();
+	}
+	controls.onMousePressed();
+}
+
+void mouseReleased() {
+	controls.onMouseReleased();
+}
 
