@@ -17,7 +17,7 @@ class Scene {
 	}
 
 	public void update() {
-		console.log("ERROR: update method is sub-classes responsibility");
+		console.log("ERROR: Scene.update method is sub-classes responsibility");
 	}
 
 }
