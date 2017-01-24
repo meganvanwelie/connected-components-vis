@@ -114,12 +114,12 @@ class SquareDrawable extends Drawable {
 
 	public void draw() {
 		if (isSelected()) {
-			fill(highlightColor());
+			fill(style.highlightColor());
 		} else {
-			fill(backgroundColor());
+			fill(style.backgroundColor());
 		}
-		if (strokeColor() != null) {
-			stroke(strokeColor());
+		if (style.strokeColor() != null) {
+			stroke(style.strokeColor());
 		} else {
 			noStroke();
 		}

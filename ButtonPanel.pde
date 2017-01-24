@@ -66,7 +66,7 @@ class Button extends SquareDrawable {
 	public void draw() {
 		super.draw();
 		// draw button text
-		fill(textColor());
+		fill(style.textColor());
 		textAlign(CENTER);
 		if (label != null) {
 			text(this.label, this.x + width/2, this.y + height/2);
