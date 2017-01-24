@@ -14,7 +14,7 @@ public class SceneManager {
 	}
 
 	public void init() {
-		scene = 0;
+		scene = SCENE_CREATE_IMAGE;
 		sceneTimer = 0;
 	}
 
