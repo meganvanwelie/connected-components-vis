@@ -42,13 +42,13 @@ class Drawable {
 
 class DrawableStyle {
 
-	private color cbackgounrd;
+	private color cbackground;
 	private color cforeground;
 	private color ctext;
 	private color cstroke;
 	private color chighlight;
 
-	public DrawableState() {
+	public DrawableStyle() {
 		setBackgroundColor(color(255));
 		setForegroundColor(color(255));
 		setTextColor(color(0));
