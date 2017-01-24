@@ -1,4 +1,3 @@
-
 ImageGrid grid;
 SceneManager sceneManager;
 BFSearchScene algorithm;
@@ -26,7 +25,7 @@ void setup(){
   int w = 600;
   int h = 600;
   int border = 5;
-  size( w+2*border, h+2*border );
+  size(w+2*border, h+2*border);
 
   // setup and initialize scene manager
   sceneManager = new SceneManager();
@@ -44,6 +43,14 @@ void setup(){
   controls.addButton(w-10-40, h-50+5, 40, 25, buttonStart, startAlgorithm);
 
   imageCreated = false;
+}
+
+void reset() {
+	//TODO:
+	//sceneManager.reset();
+	//grid.reset();
+	//algorithm.reset();
+	//imageCreated = false;
 }
 
 void draw(){
@@ -73,14 +80,12 @@ void draw(){
 }
 
 void mouseDragged() {
-	console.log("Main mouse dragged");
 	if (sceneManager.scene == sceneManager.SCENE_CREATE_IMAGE) {
 		grid.onMouseDragged();
 	}
 }
 
 void mousePressed() {
-	console.log("Main mouse click");
 	if (sceneManager.scene == sceneManager.SCENE_CREATE_IMAGE) {
 		grid.onMousePressed();
 	}
