@@ -61,6 +61,7 @@ class ImageGrid extends SquareDrawable {
 		super.draw();
 		update();
 
+		DrawableStyle s = currentStyle();
 		// draw pixels
 		int row, col;
 		for (row = 0; row < vsteps; ++row) {
@@ -69,7 +70,7 @@ class ImageGrid extends SquareDrawable {
 			}
 		}
 		// draw grid lines
-		stroke(style.strokeColor());
+		stroke(s.strokeColor());
 		for (GridLine gl : gridLines) {
 			line(gl.start.x, gl.start.y, gl.end.x, gl.end.y);
 		}
@@ -202,8 +203,10 @@ class Pixel extends SquareDrawable {
 
 	public void draw() {
 		super.draw();
+
+		DrawableStyle s = currentStyle();
 		if (this.label != null) {
-			fill(style.textColor());
+			fill(s.textColor());
 			textAlign(CENTER);
 			text(this.id, x + width/2, y + height/2);
 		}

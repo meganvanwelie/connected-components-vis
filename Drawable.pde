@@ -38,6 +38,22 @@ class Drawable {
 		console.log("ERROR: Not implemented, subclass responsibility!");
 	}
 
+	public void setSpecialStyle(DrawableStyle s) {
+		this.specialStyle = s;
+	}
+
+	public void clearSpecialStyle() {
+		this.specialStyle = null;
+	}
+
+	public void currentStyle() {
+		if (specialStyle != null) {
+			return specialStyle;
+		} else {
+			return style;
+		}
+	}
+
 }
 
 class DrawableStyle {
@@ -113,13 +129,14 @@ class SquareDrawable extends Drawable {
 	}
 
 	public void draw() {
+		DrawableStyle s = currentStyle();
 		if (isSelected()) {
-			fill(style.highlightColor());
+			fill(s.highlightColor());
 		} else {
-			fill(style.backgroundColor());
+			fill(s.backgroundColor());
 		}
-		if (style.strokeColor() != null) {
-			stroke(style.strokeColor());
+		if (s.strokeColor() != null) {
+			stroke(s.strokeColor());
 		} else {
 			noStroke();
 		}
