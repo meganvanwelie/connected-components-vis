@@ -5,8 +5,8 @@ class ImageGrid extends SquareDrawable {
 	int hsteps;
 	int vsteps;
 
-	ArrayList<GridLine> gridLines;
 	Pixel[][] image;
+	ArrayList<GridLine> gridLines;
 
 	Pixel activePixel;
 
@@ -41,7 +41,7 @@ class ImageGrid extends SquareDrawable {
 		for (row = 0; row < vsteps; ++row) {
 			for (col = 0; col < hsteps; ++col) {
 				p = new Pixel(row, col, x+col*xdiv, y+row*ydiv, xdiv, ydiv);
-				p.setBackgroundColor(color(100, 20, 188));
+				p.setId(backgroundId); // all pixels set to background ID
 				this.image[row][col] = p;
 			}
 		}
@@ -49,8 +49,18 @@ class ImageGrid extends SquareDrawable {
 		this.activePixel = null;
 	}
 
+	private void update() {
+		switch(sceneManager.scene) {
+			case sceneManager.SCENE_CREATE_IMAGE:
+				setActivePixelState();
+				break;
+		}
+	}
+
 	public void draw() {
 		super.draw();
+		update();
+
 		// draw pixels
 		int row, col;
 		for (row = 0; row < vsteps; ++row) {
@@ -67,16 +77,10 @@ class ImageGrid extends SquareDrawable {
 
 	public void onMousePressed() {
 		locateActivePixel();
-		setActivePixelState();
-	}
-
-	public void onMouseReleased() {
-		clearActivePixel();
-		//activePixelect(false);
 	}
 
 	public void onMouseDragged() {
-		// efficiently checks for mouse drag by only considering
+		// Efficiently checks for mouse drag by only considering
 		// neighbors of pixel in which original click took place
 		if (activePixel != null) {
 			if (!activePixel.contains(mouseX, mouseY)) {
@@ -93,7 +97,10 @@ class ImageGrid extends SquareDrawable {
 		} else {
 			locateActivePixel();
 		}
-		setActivePixelState();
+	}
+
+	public void onMouseReleased() {
+		clearActivePixel();
 	}
 
 	public boolean contains(int x, int y) {
@@ -101,15 +108,21 @@ class ImageGrid extends SquareDrawable {
 			   (y >= this.y && y <= this.y + height);
 	}
 
-	/* Locates and sets the currently selected pixel. */
+	public boolean inRange(PVector p) {
+		return (p.x >= 0 && p.x < hsteps && p.y >= 0 && p.y < vsteps);
+	}
+
+	/* Locates and sets the currently selected pixel.*/
 	private void locateActivePixel() {
 		clearActivePixel();
 		if (contains(mouseX, mouseY)) {
 			int col, row;
+			outerloop:
 			for (row = 0; row < vsteps; ++row) {
 				for (col = 0; col < hsteps; ++col) {
 					if (image[row][col].contains(mouseX, mouseY)) {
 						setActivePixel(image[row][col]);
+						break outerloop;
 					}
 				}
 			}
@@ -128,9 +141,11 @@ class ImageGrid extends SquareDrawable {
 		// set pixel to selected
 		if (activePixel != null) {
 			if (mouseButton == LEFT) {
-				activePixel.select(true);
+				//activePixel.select(true);
+				activePixel.setId(foregroundId);
 			} else {
-				activePixel.select(false);
+				//activePixel.select(false);
+				activePixel.setId(backgroundId);
 			}
 		}
 	}
@@ -142,15 +157,46 @@ class Pixel extends SquareDrawable {
 	int row;
 	int col;
 
+	String label;
+	int groupId;
+
 	public Pixel(int row, int col, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		this.row = row;
 		this.col = col;
+
+		this.label = null;
+
+		this.id = -1;
+		this.groupId = -1;		// unassigned
+
+		style.setNoStroke();
 	}
 
-	public boolean contains(int x, int y) {
-		return (x >= this.x && x <= this.x + width) &&
-			   (y >= this.y && y <= this.y + height);
+	public void setId(int id) {
+		this.id = id;
+		this.label = String.valueOf(id);
+		if (id == 0) {
+			style.setBackgroundColor(color(255)); //pixelColorMap.get(this.label));
+		} else {
+			style.setBackgroundColor(color(255, 0, 255));
+		}
+	}
+
+	public void setGroupId(int id) {
+		this.groupId = id;
+	}
+
+	public int id() {
+		return this.id;
+	}
+
+	public int groupId() {
+		return this.groupId;
+	}
+
+	public void isAssigned() {
+		return (this.groupId != -1);
 	}
 
 	public ArrayList<Pixel> neighbors(Pixel[][] image, int rows, int cols) {
@@ -164,6 +210,22 @@ class Pixel extends SquareDrawable {
 
 	public void draw() {
 		super.draw();
+		if (this.label != null) {
+			fill(style.textColor());
+			textAlign(CENTER);
+			text(this.id, x + width/2, y + height/2);
+		}
+		/*
+		if (visited) {
+			fill(color(100, 100, 100, 100));
+			rect(this.x, this.y, width, height);
+		}
+		*/
+	}
+
+	public boolean contains(int x, int y) {
+		return (x >= this.x && x <= this.x + width) &&
+			   (y >= this.y && y <= this.y + height);
 	}
 
 }
