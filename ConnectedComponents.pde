@@ -1,23 +1,26 @@
-float radius = 50.0;
-int X, Y;
-int nX, nY;
-int delay = 16;
 
 ImageGrid grid;
 SceneManager sceneManager;
+BFSearchScene algorithm;
+
+int backgroundId = 0;
+int foregroundId = 1;
 
 // Setup buttons
 // First-class Javascript functions, triggered by button presses
 var demo = function() {
 	console.log("Demo function!");
+	imageCreated = true;
 };
 
 var startAlgorithm = function() {
 	console.log("Start function!");
+	imageCreated = true;
 };
 
 String buttonDemo = "Demo";
 String buttonStart = "Start";
+boolean imageCreated;
 
 void setup(){
   int w = 600;
@@ -29,6 +32,8 @@ void setup(){
   sceneManager = new SceneManager();
   sceneManager.init();
 
+  algorithm = new BFSearchScene();
+
   // create image grid
   grid = new ImageGrid(border, border, w, h-50, 10, 10);
   grid.style.setStrokeColor(color(255, 0, 255));
@@ -37,24 +42,30 @@ void setup(){
   controls = new ButtonPanel(border, h-50, w, 50);
   controls.addButton(10, h-50+5, 40, 25, buttonDemo, demo);
   controls.addButton(w-10-40, h-50+5, 40, 25, buttonStart, startAlgorithm);
+
+  imageCreated = false;
 }
 
 void draw(){
   background(0, 0, 0);
 
   if (sceneManager.update()) {
-	  /*
-	  if (queue.length > 0) {
-		currentPixel = queue.shift();
-		addToQueue(currentPixel.neighbors());
-	  } else {
-		sweepPixel = sweepPixel.nextPixel(grid);
-		if (!sweepPixel.isAssigned()) {
-			updateConnectedComponentId(); // get next ID
-			queue.push(sweepPixel);		  // add to queue
-		}
+	  switch (sceneManager.scene) {
+		  case sceneManager.SCENE_CREATE_IMAGE:
+			  // no work to do, wait for user input
+			  if (imageCreated) {
+				sceneManager.nextScene();
+			  }
+			  break;
+		  case sceneManager.SCENE_SEARCH:
+			  if (!algorithm.update()) {
+				sceneManager.nextScene();
+			  }
+			  break;
+		  case sceneManager.SCENE_FINSIHED:
+			  // show closing scene
+			  break;
 	  }
-	  */
   }
 
   grid.draw();
