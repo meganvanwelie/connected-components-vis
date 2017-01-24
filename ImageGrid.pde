@@ -187,14 +187,6 @@ class Pixel extends SquareDrawable {
 		this.groupId = id;
 	}
 
-	public int id() {
-		return this.id;
-	}
-
-	public int groupId() {
-		return this.groupId;
-	}
-
 	public void isAssigned() {
 		return (this.groupId != -1);
 	}
