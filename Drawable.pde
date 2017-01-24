@@ -3,11 +3,8 @@ class Drawable {
 	float x;
 	float y;
 
-	private color cbackgounrd;
-	private color cforeground;
-	private color ctext;
-	private color cstroke;
-	private color chighlight;
+	public DrawableStyle style;
+	public DrawableState specialStyle;
 
 	private boolean selected;
 
@@ -15,11 +12,8 @@ class Drawable {
 		this.x = x;
 		this.y = y;
 
-		setBackgroundColor(color(255));
-		setForegroundColor(color(255));
-		setTextColor(color(0));
-		setStrokeColor(color(0));
-		setHighlightColor(color(255, 0, 0));
+		this.style = new DrawableStyle();
+		this.specialStyle = null;
 
 		select(false);
 	}
@@ -30,6 +24,36 @@ class Drawable {
 
 	public void select(boolean s) {
 		this.selected = s;
+	}
+
+	public boolean isSelected() {
+		return this.selected;
+	}
+
+	public void onMouseClick() {
+		console.log("ERROR: Not implemented, subclass responsibility!");
+	}
+
+	public void onMousePressed() {
+		console.log("ERROR: Not implemented, subclass responsibility!");
+	}
+
+}
+
+class DrawableStyle {
+
+	private color cbackgounrd;
+	private color cforeground;
+	private color ctext;
+	private color cstroke;
+	private color chighlight;
+
+	public DrawableState() {
+		setBackgroundColor(color(255));
+		setForegroundColor(color(255));
+		setTextColor(color(0));
+		setStrokeColor(color(0));
+		setHighlightColor(color(255, 0, 0));
 	}
 
 	public void setBackgroundColor(color c) {
@@ -56,10 +80,6 @@ class Drawable {
 		this.chighlight = c;
 	}
 
-	public boolean isSelected() {
-		return this.selected;
-	}
-
 	public color backgroundColor() {
 		return this.cbackground;
 	}
@@ -79,15 +99,6 @@ class Drawable {
 	public color highlightColor() {
 		return this.chighlight;
 	}
-
-	public void onMouseClick() {
-		console.log("ERROR: Not implemented, subclass responsibility!");
-	}
-
-	public void onMousePressed() {
-		console.log("ERROR: Not implemented, subclass responsibility!");
-	}
-
 }
 
 class SquareDrawable extends Drawable {
@@ -116,3 +127,4 @@ class SquareDrawable extends Drawable {
 	}
 
 }
+

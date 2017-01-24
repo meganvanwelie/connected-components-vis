@@ -52,7 +52,7 @@ class Button extends SquareDrawable {
 		this.label = "";
 		this.functionality = null;
 
-		setHighlightColor(color(255, 0, 0));
+		style.setHighlightColor(color(255, 0, 0));
 	}
 
 	public void setLabel(String label) {

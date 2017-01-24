@@ -59,7 +59,7 @@ class ImageGrid extends SquareDrawable {
 			}
 		}
 		// draw grid lines
-		stroke(strokeColor());
+		stroke(style.strokeColor());
 		for (GridLine gl : gridLines) {
 			line(gl.start.x, gl.start.y, gl.end.x, gl.end.y);
 		}

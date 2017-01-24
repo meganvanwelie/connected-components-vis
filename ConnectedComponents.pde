@@ -31,7 +31,7 @@ void setup(){
 
   // create image grid
   grid = new ImageGrid(border, border, w, h-50, 10, 10);
-  grid.setStrokeColor(color(255, 0, 255));
+  grid.style.setStrokeColor(color(255, 0, 255));
 
   // create control button panel
   controls = new ButtonPanel(border, h-50, w, 50);
