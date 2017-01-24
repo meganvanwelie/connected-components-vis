@@ -7,7 +7,7 @@ public class SceneManager {
 	int scene;
 	int sceneTimer;
 	int STEP_SIZE = 1;
-	int SCENE_DURATION = 1;
+	int SCENE_DURATION = 100;
 
 	public SceneManager() {
 		init();
@@ -23,6 +23,7 @@ public class SceneManager {
 			sceneTimer += STEP_SIZE;
 			return false;
 		} else {
+			sceneTimer = 0;
 			return true;
 		}
 	}
@@ -36,7 +37,6 @@ public class SceneManager {
 				scene = SCENE_FINISHED;
 				break;
 		}
-		sceneTimer = 0;
 	}
 
 }
