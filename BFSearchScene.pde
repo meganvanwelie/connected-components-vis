@@ -46,6 +46,7 @@ class BFSearchScene extends Scene {
 
 	// executes current mode, updates mode to execute on next call
 	public boolean update() {
+		console.log("Current mode: " + mode);
 		switch(mode) {
 			case SWEEP_SEARCH_STEP:
 				sweepSearchPixel = nextPixel(sweepSearchPixel);
@@ -107,7 +108,7 @@ class BFSearchScene extends Scene {
 			case IS_PIXEL_UNASSIGNED_AND_IN_CURRENT_COMPONENT:
 				setActivePixel(bfsSearchPixel);
 				if (isPixelAssigned(bfsSearchPixel) ||
-						pixelId(bfsSearchPixel) != currentComponentId) {
+						pixelId(bfsSearchPixel) != pixelId(sweepSearchPixel)) {
 					setMainText("This pixel has already been assigned or is not in our current component. TODO: indicate which one.");
 					mode = TAKE_PIXEL_FROM_QUEUE;
 				} else {
