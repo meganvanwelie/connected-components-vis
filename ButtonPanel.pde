@@ -49,7 +49,7 @@ class Button extends SquareDrawable {
 
 	public Button(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		this.label = "";
+		this.label = null;
 		this.functionality = null;
 
 		style.setHighlightColor(color(255, 0, 0));
@@ -68,7 +68,9 @@ class Button extends SquareDrawable {
 		// draw button text
 		fill(textColor());
 		textAlign(CENTER);
-		text(this.label, this.x + width/2, this.y + height/2);
+		if (label != null) {
+			text(this.label, this.x + width/2, this.y + height/2);
+		}
 	}
 
 	public void click() {
