@@ -9,6 +9,10 @@ class BFSearchScene extends Scene {
 	HashMap<int, ArrayList<PVector>> connectedComponents;
 
 	ArrayList<PVector> neighborPixels;
+	PVector activePixel;
+
+	private DrawableStyle neighborStyle;
+	private DrawableStyle activeStyle;
 
 	// Timeline of updates
 	//   1. step one pixel over.
@@ -42,6 +46,13 @@ class BFSearchScene extends Scene {
 		this.connectedComponents = new HashMap<int, ArrayList<PVector>>();
 
 		this.neighborPixels = new ArrayList<PVector>();
+		this.activePixel = null;
+
+		this.neighborStyle = new DrawableStyle();
+		neighborStyle.setBackgroundColor(color(100,100,100));
+
+		this.activeStyle = new DrawableStyle();
+		activeStyle.setBackgroundColor(color(100, 0, 200));
 	}
 
 	// executes current mode, updates mode to execute on next call
@@ -55,20 +66,21 @@ class BFSearchScene extends Scene {
 					setMainText("END OF ALGORITHM");
 					return false;
 				} else {
-					// new pixel found, highlight it
+					// new pixel found, highlight it. continue on to check if assigned.
+					setActivePixel(sweepSearchPixel);
 					setMainText("We stepped to the next pixel, and found one.");
-					//grid.image[sweepSearchPixel.y][sweepSearchPixel.x].select(true);
-					// continue on to check if it has been visited
 					mode = IS_PIXEL_A_NEW_COMPONENT;
 				}
 				break;
 			case IS_PIXEL_A_NEW_COMPONENT:
 				if (isPixelAssigned(sweepSearchPixel)) {
 					// pixel already assigned, gray out highlight and continue on to look for next pixel
+					clearActivePixel();
 					setMainText("Pixel was already assigned, so we do not attempt to reassign.");
 					mode = SWEEP_SEARCH_STEP;
 				} else {
 					// pixel not yet assigned, show as active pixel and continue on BFS search
+					setActivePixel(sweepSearchPixel);
 					currentComponentId = createNewComponent();
 					addPixelToComponent(currentComponentId, sweepSearchPixel);
 					setMainText("Pixel is not yet assigned. We add it to our component.");
@@ -93,6 +105,7 @@ class BFSearchScene extends Scene {
 				mode = TAKE_PIXEL_FROM_QUEUE;
 				break;
 			case TAKE_PIXEL_FROM_QUEUE:
+				clearActivePixel();
 				clearNeighborPixels();
 				if (queue.length == 0) {
 					bfsSearchPixel = null;
@@ -101,12 +114,12 @@ class BFSearchScene extends Scene {
 				} else {
 					// highlight popped value as currently considered
 					bfsSearchPixel = queue.shift();
+					setActivePixel(bfsSearchPixel);
 					setMainText("We consider first value on queue");
 					mode = IS_PIXEL_UNASSIGNED_AND_IN_CURRENT_COMPONENT;
 				}
 				break;
 			case IS_PIXEL_UNASSIGNED_AND_IN_CURRENT_COMPONENT:
-				setActivePixel(bfsSearchPixel);
 				if (isPixelAssigned(bfsSearchPixel) ||
 						pixelId(bfsSearchPixel) != pixelId(sweepSearchPixel)) {
 					setMainText("This pixel has already been assigned or is not in our current component. TODO: indicate which one.");
@@ -124,28 +137,24 @@ class BFSearchScene extends Scene {
 
 	private void clearNeighborPixels() {
 		for (PVector p : neighborPixels) {
-			//TODO: clear pixel style
-			//grid.image[p.y][p.x].clearState();
+			grid.image[p.y][p.x].clearSpecialStyle();
 		}
 		neighborPixels.clear();
 	}
 
 	private void setNeighborPixel(PVector p) {
 		neighborPixels.add(p);
-		//TODO: set new style to pixel
-		//grid.image[p.y][p.x].setSpecialState("neighbor", neighborState);
+		grid.image[p.y][p.x].setSpecialStyle(neighborStyle);
 	}
 
 	private void clearActivePixel() {
+		grid.image[activePixel.y][activePixel.x].clearSpecialStyle();
 		activePixel = null;
-		//TODO: clear pixel style
-		//grid.image[p.y][p.x].clearState();
 	}
 
 	private void setActivePixel(PVector p) {
 		activePixel = p;
-		//TODO: set new style to pixel
-		//grid.image[p.y][p.x].setSpecialState("active", activeState);
+		grid.image[p.y][p.x].setSpecialStyle(activeStyle);
 	}
 
 	private boolean isPixelAssigned(PVector p) {
