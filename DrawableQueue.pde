@@ -52,6 +52,7 @@ class DrawableQueue extends SquareDrawable {
 	public void draw() {
 		super.draw();
 
+		PVector item;
 		int xPos = x + itemBorder;
 		int yPos = y + itemBorder;
 
@@ -60,35 +61,62 @@ class DrawableQueue extends SquareDrawable {
 		noStroke();
 		rect(xPos, yPos, itemWidth, itemHeight);
 
-		// set item queue colors
-		fill(color(255));
-		stroke(color(0));
-
 		// draw head if item has been dequeued
 		if (head != null) {
-			rect(xPos, yPos, itemWidth, itemHeight);
+			item = head;
+			label = "( " + item.x + ", " + item.y + " )";
+			drawQueueItem(xPos, yPos, label);
 		}
 		yPos += itemBorder + itemHeight; // always start below head position
 
+		// calculate number of queue items too show
+		int num = size();
+		boolean drawTooLarge = false;
+		if (num > this.maxItems) {
+			num = this.maxItems - 2;
+			drawTooLarge = true;
+		}
+
 		// draw remainder of queue
-		PVector item;
-		int num = Math.min(this.maxItems, size());
 		for (int i = 0; i < num; ++i) {
 			item = this.queue[i];
-
-			// draw background
-			fill(color(255));
-			stroke(color(0));
-			rect(xPos, yPos, itemWidth, itemHeight);
-
-			// draw label
 			label = "( " + item.x + ", " + item.y + " )";
-			fill(color(0));
-			textAlign(CENTER);
-			text(label, xPos + itemWidth/2, yPos + itemHeight/2);
-
+			drawQueueItem(xPos, yPos, label);
 			yPos += itemHeight;
 		}
+
+		if (drawTooLarge) {
+			// draw ellipse indicating that the queue is too large
+			fill(color(200, 200, 200));
+			noStroke();
+			float ellipseX = xPos + itemWidth/2;
+			float ellipseHeight = itemHeight / 7;
+			ellipse(ellipseX, yPos + 1*ellipseHeight + ellipseHeight/2,
+					ellipseHeight, ellipseHeight);
+			ellipse(ellipseX, yPos + 3*ellipseHeight + ellipseHeight/2,
+					ellipseHeight, ellipseHeight);
+			ellipse(ellipseX, yPos + 5*ellipseHeight + ellipseHeight/2,
+					ellipseHeight, ellipseHeight);
+
+			// draw final item in queue
+			yPos += itemHeight;
+			item = this.queue[size() - 1];
+			label = "( " + item.x + ", " + item.y + " )";
+			drawQueueItem(xPos, yPos, label);
+		}
+
+	}
+
+	private void drawQueueItem(int x, int y, String label) {
+		// draw background
+		fill(color(255));
+		stroke(color(0));
+		rect(x, y, itemWidth, itemHeight);
+
+		// draw label
+		fill(color(0));
+		textAlign(CENTER);
+		text(label, x + itemWidth/2, y + itemHeight/2);
 	}
 
 }
