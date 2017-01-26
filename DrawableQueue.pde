@@ -7,13 +7,22 @@ class DrawableQueue extends SquareDrawable {
 	int itemHeight;
 	int itemBorder;
 
+	int maxItems;
+
 	public DrawableQueue(int x, int y, int w, int h) {
 		super(x, y, w, h);
 
 		this.queue = [];
 
 		this.itemBorder = 4;
-		this.itemHeight = 25;
+		int queueWidth = this.width - itemBorder;
+		int queueHeight = this.height - itemBorder*4;
+
+		float itemAspectRatio = 0.3;
+
+		// calculate queue item height
+		this.maxItems = (int)(queueHeight / (queueWidth * itemAspectRatio));
+		this.itemHeight = queueHeight / (maxItems + 1);
 		this.itemWidth = w - itemBorder*2;
 	}
 
@@ -44,22 +53,39 @@ class DrawableQueue extends SquareDrawable {
 		super.draw();
 
 		int xPos = x + itemBorder;
-		int yPos = y + itemBorder + itemHeight; // start below head position
+		int yPos = y + itemBorder;
 
-		// TODO: handle too many items to draw
-		int num = size();
-		int endY = num*itemHeight + yPos;
-		if (endY > (y + height)) {
-			num = (int)((height - yPos) / itemHeight);
+		// draw empty head background
+		fill(color(200, 200, 200));
+		noStroke();
+		rect(xPos, yPos, itemWidth, itemHeight);
+
+		// set item queue colors
+		fill(color(255));
+		stroke(color(0));
+
+		// draw head if item has been dequeued
+		if (head != null) {
+			rect(xPos, yPos, itemWidth, itemHeight);
 		}
+		yPos += itemBorder + itemHeight; // always start below head position
 
+		// draw remainder of queue
 		PVector item;
+		int num = Math.min(this.maxItems, size());
 		for (int i = 0; i < num; ++i) {
 			item = this.queue[i];
 
+			// draw background
 			fill(color(255));
 			stroke(color(0));
 			rect(xPos, yPos, itemWidth, itemHeight);
+
+			// draw label
+			label = "( " + item.x + ", " + item.y + " )";
+			fill(color(0));
+			textAlign(CENTER);
+			text(label, xPos + itemWidth/2, yPos + itemHeight/2);
 
 			yPos += itemHeight;
 		}
