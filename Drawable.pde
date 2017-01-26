@@ -38,6 +38,10 @@ class Drawable {
 		console.log("ERROR: Not implemented, subclass responsibility!");
 	}
 
+	public void setStyle(DrawableStyle s) {
+		this.style = s;
+	}
+
 	public void setSpecialStyle(DrawableStyle s) {
 		this.specialStyle = s;
 	}
