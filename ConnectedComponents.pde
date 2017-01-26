@@ -1,6 +1,7 @@
 ImageGrid grid;
 SceneManager sceneManager;
 BFSearchScene algorithm;
+DrawableQueue queue;
 
 int backgroundId = 0;
 int foregroundId = 1;
@@ -34,8 +35,14 @@ void setup(){
   algorithm = new BFSearchScene();
 
   // create image grid
-  grid = new ImageGrid(border, border, w, h-50, 10, 10);
+  int gridSize = w*(3/4);
+  grid = new ImageGrid(border, border, gridSize, gridSize, 10, 10);
   grid.style.setStrokeColor(color(255, 0, 255));
+
+  // create queue
+  int queueWidth = w - gridSize - border;
+  int queueHeight = gridSize;
+  queue = new DrawableQueue(2*border+gridSize, border, queueWidth, queueHeight);
 
   // create control button panel
   controls = new ButtonPanel(border, h-50, w, 50);
@@ -75,6 +82,7 @@ void draw(){
 
   grid.draw();
   controls.draw();
+  queue.draw();
 }
 
 void mouseDragged() {

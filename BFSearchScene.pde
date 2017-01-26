@@ -1,7 +1,5 @@
 class BFSearchScene extends Scene {
 
-	var queue;
-
 	Pvector sweepSearchPixel;
 	Pvector bfsSearchPixel;
 
@@ -13,8 +11,11 @@ class BFSearchScene extends Scene {
 
 	private DrawableStyle neighborStyle;
 	private DrawableStyle activeStyle;
+	private DrawableStyle assignedStyle;
 
 	// Timeline of updates
+	//  0. set all pixel group IDs to "0"
+	int INITIALIZE_SEARCH_GRID = 0;
 	//   1. step one pixel over.
 	//     NEGATIVE: at end of image, stop.
 	//     POSTIIVE: highlight selected pixel, check if it has been assigned. continue.
@@ -36,9 +37,8 @@ class BFSearchScene extends Scene {
 
 	public BFSearchScene() {
 		super();
-		this.mode = SWEEP_SEARCH_STEP;
+		this.mode = INITIALIZE_SEARCH_GRID;
 
-		this.queue = [];
 		this.sweepSearchPixel = new PVector(-1, 0); // -1 so first step is (0,0)
 		this.bfsSearchPixel = null;
 
@@ -49,16 +49,32 @@ class BFSearchScene extends Scene {
 		this.activePixel = null;
 
 		this.neighborStyle = new DrawableStyle();
-		neighborStyle.setBackgroundColor(color(100,100,100));
+		neighborStyle.setBackgroundColor(color(200, 0, 100));
 
 		this.activeStyle = new DrawableStyle();
 		activeStyle.setBackgroundColor(color(100, 0, 200));
+
+		this.assignedStyle = new DrawableStyle();
+		assignedStyle.setBackgroundColor(color(100, 100, 100, 100));
+	}
+
+	public void reset() {
+		this.mode = INITIALIZE_SEARCH_GRID;
+		this.queue.clear();
+		this.sweepSearchPixel = new PVector(-1, 0);
+		this.currentComponentId = 0;
+		this.connectedComponents.clear();
+		this.neighborPixels.clear();
+		this.activePixel = null;
 	}
 
 	// executes current mode, updates mode to execute on next call
 	public boolean update() {
 		console.log("Current mode: " + mode);
 		switch(mode) {
+			case INITIALIZE_SEARCH_GRID:
+				mode = SWEEP_SEARCH_STEP;
+				break;
 			case SWEEP_SEARCH_STEP:
 				sweepSearchPixel = nextPixel(sweepSearchPixel);
 				if (sweepSearchPixel == null) {
@@ -98,7 +114,9 @@ class BFSearchScene extends Scene {
 				for (PVector n : neighbors) {
 					if (grid.inRange(n)) {
 						setNeighborPixel(n);
-						queue.push(n);
+						//if (!isPixelAssigned(n)) {
+							queue.enqueue(n);
+						//}
 					}
 				}
 				setMainText("We now look to the neighbors of the pixel to see if they are in the component. Add to queue");
@@ -107,13 +125,13 @@ class BFSearchScene extends Scene {
 			case TAKE_PIXEL_FROM_QUEUE:
 				clearActivePixel();
 				clearNeighborPixels();
-				if (queue.length == 0) {
+				if (queue.size() == 0) {
 					bfsSearchPixel = null;
 					setMainText("Queue was empty. There are no more candidates for current component. We continue our sweep.");
 					mode = SWEEP_SEARCH_STEP;
 				} else {
 					// highlight popped value as currently considered
-					bfsSearchPixel = queue.shift();
+					bfsSearchPixel = queue.dequeue();
 					setActivePixel(bfsSearchPixel);
 					setMainText("We consider first value on queue");
 					mode = IS_PIXEL_UNASSIGNED_AND_IN_CURRENT_COMPONENT;
@@ -205,6 +223,8 @@ class BFSearchScene extends Scene {
 			ArrayList<PVector> pixelsInComponent = connectedComponents.get(componentId);
 			pixelsInComponent.add(p);
 			connectedComponents.put(componentId, pixelsInComponent);
+
+			grid.image[p.y][p.x].setStyle(assignedStyle);
 		} else {
 			console.log("ERROR: component not yet created.");
 		}
