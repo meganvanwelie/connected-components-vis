@@ -56,23 +56,21 @@ void reset() {
 void draw(){
   background(0, 0, 0);
 
-  if (sceneManager.update()) {
-	  switch (sceneManager.scene) {
-		  case sceneManager.SCENE_CREATE_IMAGE:
-			  // no work to do, wait for user input
-			  if (imageCreated) {
-				sceneManager.nextScene();
-			  }
-			  break;
-		  case sceneManager.SCENE_SEARCH:
-			  if (!algorithm.update()) {
-				sceneManager.nextScene();
-			  }
-			  break;
-		  case sceneManager.SCENE_FINSIHED:
-			  // show closing scene
-			  break;
-	  }
+  switch (sceneManager.scene) {
+	  case sceneManager.SCENE_CREATE_IMAGE:
+		  // no work to do, wait for user input
+		  if (imageCreated) {
+			sceneManager.nextScene();
+		  }
+		  break;
+	  case sceneManager.SCENE_SEARCH:
+		  if (sceneManager.update() && !algorithm.update()) {
+			sceneManager.nextScene();
+		  }
+		  break;
+	  case sceneManager.SCENE_FINSIHED:
+		  // show closing scene
+		  break;
   }
 
   grid.draw();
