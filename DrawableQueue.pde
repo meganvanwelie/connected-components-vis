@@ -56,13 +56,17 @@ class DrawableQueue extends SquareDrawable {
 		int xPos = x + itemBorder;
 		int yPos = y + itemBorder;
 
-		// draw empty head background
-		fill(color(200, 200, 200));
-		noStroke();
-		rect(xPos, yPos, itemWidth, itemHeight);
-
-		// draw head if item has been dequeued
-		if (head != null) {
+		// draw head if item has been dequeued, else draw empty slot
+		if (head == null) {
+			// draw empty head background
+			fill(color(200, 200, 200));
+			noStroke();
+			rect(xPos, yPos, itemWidth, itemHeight);
+			fill(color(150, 150, 150));
+			textAlign(CENTER);
+			text("empty", xPos + itemWidth / 2, yPos + itemHeight / 2);
+		} else {
+			// draw non-empty head of queue
 			item = head;
 			label = "( " + item.x + ", " + item.y + " )";
 			drawQueueItem(xPos, yPos, label);
@@ -109,9 +113,14 @@ class DrawableQueue extends SquareDrawable {
 
 	private void drawQueueItem(int x, int y, String label) {
 		// draw background
-		fill(color(255));
-		stroke(color(0));
-		rect(x, y, itemWidth, itemHeight);
+		//fill(color(255));
+		//noStroke();
+		//rect(x, y, itemWidth, itemHeight);
+
+		//stroke(0);
+		//line(x, y, x, y + itemHeight);							// left
+		//line(x + itemWidth, y, x + itemWidth, y + itemHeight);  // right
+		//line(x, y + itemHeight, x + itemWidth, y + itemHeight); // bottom
 
 		// draw label
 		fill(color(0));

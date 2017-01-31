@@ -5,10 +5,15 @@ class ImageGrid extends SquareDrawable {
 	int hsteps;
 	int vsteps;
 
+	boolean showAxisLabels;
+
 	Pixel[][] image;
 	ArrayList<GridLine> gridLines;
 
 	Pixel activePixel;
+
+	int backgroundId = 0;
+	int foregroundId = 1;
 
 	public ImageGrid(float x, float y, float w, float h, int hsteps, int vsteps) {
 		super(x, y, w, h);
@@ -18,6 +23,8 @@ class ImageGrid extends SquareDrawable {
 		// calculate size of grid lines
 		this.xdiv = w / hsteps;
 		this.ydiv = h / vsteps;
+
+		this.showAxisLabels = false;;
 
 		// initialize grid lines for efficient drawing
 		this.gridLines = new ArrayList<GridLine>();
@@ -176,16 +183,16 @@ class Pixel extends SquareDrawable {
 
 	public void setId(int id) {
 		this.id = id;
-		this.label = String.valueOf(id);
 		if (id == 0) {
 			style.setBackgroundColor(color(255)); //pixelColorMap.get(this.label));
 		} else {
-			style.setBackgroundColor(color(255, 0, 255));
+			style.setBackgroundColor(color(124, 77, 255));
 		}
 	}
 
 	public void setGroupId(int id) {
 		this.groupId = id;
+		this.label = groupId;
 	}
 
 	public void isAssigned() {
@@ -204,18 +211,18 @@ class Pixel extends SquareDrawable {
 	public void draw() {
 		super.draw();
 
+		// draw special pixel over
+		if (specialStyle != null) {
+			fill(specialStyle.backgroundColor());
+			rect(this.x, this.y, width, height);
+		}
+
 		DrawableStyle s = currentStyle();
 		if (this.label != null) {
 			fill(s.textColor());
 			textAlign(CENTER);
-			text(this.id, x + width/2, y + height/2);
+			text(this.label, x + width/2, y + height/2);
 		}
-		/*
-		if (visited) {
-			fill(color(100, 100, 100, 100));
-			rect(this.x, this.y, width, height);
-		}
-		*/
 	}
 
 	public boolean contains(int x, int y) {

@@ -7,6 +7,7 @@ class Drawable {
 	public DrawableState specialStyle;
 
 	private boolean selected;
+	private boolean visible;
 
 	public Drawable(float x, float y) {
 		this.x = x;
@@ -16,6 +17,7 @@ class Drawable {
 		this.specialStyle = null;
 
 		select(false);
+		show();
 	}
 
 	public void select() {
@@ -28,6 +30,18 @@ class Drawable {
 
 	public boolean isSelected() {
 		return this.selected;
+	}
+
+	public void show() {
+		visible = true;
+	}
+
+	public void hide() {
+		visible = false;
+	}
+
+	public boolean isVisible() {
+		return this.visible;
 	}
 
 	public void onMouseClick() {
@@ -133,18 +147,18 @@ class SquareDrawable extends Drawable {
 	}
 
 	public void draw() {
-		DrawableStyle s = currentStyle();
+		// always draw regular style
 		if (isSelected()) {
-			fill(s.highlightColor());
+			fill(style.highlightColor());
 		} else {
-			fill(s.backgroundColor());
+			fill(style.backgroundColor());
 		}
-		if (s.strokeColor() != null) {
-			stroke(s.strokeColor());
+		if (style.strokeColor() != null) {
+			stroke(style.strokeColor());
 		} else {
 			noStroke();
 		}
-		rect(this.x, this.y, width, height);
+		rect(x, y, width, height);
 	}
 
 }

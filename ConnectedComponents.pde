@@ -1,30 +1,24 @@
+/* @pjs font="https://fonts.googleapis.com/css?family=Roboto"; */
+/* @pjs font="https://fonts.googleapis.com/css?family=Sansita"; */
+
 ImageGrid grid;
 SceneManager sceneManager;
 BFSearchScene algorithm;
 DrawableQueue queue;
 
-int backgroundId = 0;
-int foregroundId = 1;
-
 // Setup buttons
 // First-class Javascript functions, triggered by button presses
-var demo = function() {
-	console.log("Demo function!");
-	imageCreated = true;
-};
-
 var startAlgorithm = function() {
 	console.log("Start function!");
 	imageCreated = true;
 };
 
-String buttonDemo = "Demo";
 String buttonStart = "Start";
 boolean imageCreated;
 
 void setup(){
   int w = 600;
-  int h = 600;
+  int h = 550;
   int border = 5;
   size(w+2*border, h+2*border);
 
@@ -37,19 +31,23 @@ void setup(){
   // create image grid
   int gridSize = w*(3/4);
   grid = new ImageGrid(border, border, gridSize, gridSize, 10, 10);
-  grid.style.setStrokeColor(color(255, 0, 255));
 
   // create queue
   int queueWidth = w - gridSize - border;
   int queueHeight = gridSize;
+  console.log("window size " + queueHeight);
   queue = new DrawableQueue(2*border+gridSize, border, queueWidth, queueHeight);
 
   // create control button panel
-  controls = new ButtonPanel(border, h-50, w, 50);
-  controls.addButton(10, h-50+5, 40, 25, buttonDemo, demo);
-  controls.addButton(w-10-40, h-50+5, 40, 25, buttonStart, startAlgorithm);
+  int buttonPanelHeight = h - gridSize - border;
+  controls = new ButtonPanel(border, 2*border+gridSize, w, buttonPanelHeight);
+  int buttonSize = buttonPanelHeight - 4*border;
+  controls.addButton(3*border, h-buttonSize-border, buttonSize, buttonSize,
+						buttonStart, startAlgorithm, true);
 
   imageCreated = false;
+
+  textFont(createFont("Sansita", 14));
 }
 
 void reset() {
@@ -74,6 +72,7 @@ void draw(){
 		  if (sceneManager.update() && !algorithm.update()) {
 			sceneManager.nextScene();
 		  }
+		  controls.setMainText(algorithm.mainText());
 		  break;
 	  case sceneManager.SCENE_FINSIHED:
 		  // show closing scene
